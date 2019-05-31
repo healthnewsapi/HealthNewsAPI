@@ -3,6 +3,6 @@
 
 export const environment = {
   server: {
-    port: process.env.SERVER_PORT || 8080
+    port: process.env.SERVER_PORT_DB_API || 8080
   }
 };

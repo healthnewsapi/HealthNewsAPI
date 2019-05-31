@@ -1,5 +1,5 @@
 import * as restify from "restify";
-import { Router } from "../routes/router";
+import { Router } from "../routes/Router";
 import { environment } from "./environment";
 
 export class Server {
