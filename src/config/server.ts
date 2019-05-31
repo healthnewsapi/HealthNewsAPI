@@ -1,36 +1,31 @@
 import * as restify from "restify";
+import { Router } from "../routes/router";
 import { environment } from "./environment";
 
 export class Server {
-  public app: restify.Server;
+  public appServer: restify.Server;
 
   constructor() {
-    this.app = restify.createServer({
+    this.appServer = restify.createServer({
       name: "Database news",
       version: "1.0.0"
     });
   }
 
-  public initRoutes() {
+  public initRoutes(routes: Router[] = []) {
 
-    this.app.use(restify.plugins.queryParser());
+    this.appServer.use(restify.plugins.queryParser());
 
-    // Routes
-
-    this.app.get("/hello/:name", (req, resp, next) => {
-      resp.json({
-        nome: req.params.name,
-        query: req.query
-      });
-      return next();
-    });
+    for (const route of routes) {
+      route.applyRoutes(this.appServer);
+    }
 
     this.listenServer();
   }
 
   private listenServer() {
-    this.app.listen(environment.server.port, () => {
-      console.log(`${this.app.name} listening at ${this.app.url}`);
+    this.appServer.listen(environment.server.port, () => {
+      console.log(`${this.appServer.name} listening at ${this.appServer.url}`);
     });
   }
 }
