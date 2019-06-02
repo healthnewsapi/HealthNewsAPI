@@ -86,8 +86,20 @@ class Noticias implements Router {
     });
 
     // ROUTE: Delete a news
-    appServer.del("/noticias", (req, resp, next) => {
-      resp.json({message: "Noticia apagada"});
+    appServer.del("/noticias/:id", async (req, resp, next) => {
+      const docReference: RequestParams.Delete = {
+        id: req.params.id,
+        index: "noticias"
+      };
+
+      try {
+        const result = await client.delete(docReference);
+        resp.json(result);
+        console.log(result);
+      } catch (err) {
+          console.error(err);
+          resp.send(err);
+      }
       return next();
     });
   }
