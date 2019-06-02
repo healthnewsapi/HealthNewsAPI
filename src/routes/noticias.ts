@@ -27,6 +27,24 @@ class Noticias implements Router {
       return next();
     });
 
+    // ROUTE: Search for ID
+    appServer.get("/noticias/:id", async (req, resp, next) => {
+      const doc: RequestParams.Get = {
+        id: req.params.id,
+        index: "noticias"
+      };
+
+      try {
+        const result = await client.get(doc);
+        resp.json(result.body);
+        console.log(result);
+      } catch (err) {
+          console.error(err);
+          resp.send(err);
+      }
+      return next();
+    });
+
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
       const doc: RequestParams.Index<Noticia> = {
