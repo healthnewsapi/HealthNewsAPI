@@ -12,9 +12,14 @@ export class Server {
     });
   }
 
-  public initRoutes(routes: Router[] = []) {
+  public startServer(routes: Router[] = []) {
+    this.initialiRoutes(routes);
+  }
+
+  private initialiRoutes(routes: Router[] = []) {
 
     this.appServer.use(restify.plugins.queryParser());
+    this.appServer.use(restify.plugins.bodyParser());
 
     for (const route of routes) {
       route.applyRoutes(this.appServer);
