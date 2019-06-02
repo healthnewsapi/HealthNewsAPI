@@ -1,5 +1,5 @@
 import * as restify from "restify";
-import { Router } from "../routes/Router";
+import { IRouter } from "../routes/Router";
 import { environment } from "./environment";
 
 export class Server {
@@ -12,11 +12,11 @@ export class Server {
     });
   }
 
-  public startServer(routes: Router[] = []) {
+  public startServer(routes: IRouter[] = []) {
     this.initialiRoutes(routes);
   }
 
-  private initialiRoutes(routes: Router[] = []) {
+  private initialiRoutes(routes: IRouter[] = []) {
 
     this.appServer.use(restify.plugins.queryParser());
     this.appServer.use(restify.plugins.bodyParser());

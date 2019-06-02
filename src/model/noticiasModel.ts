@@ -1,4 +1,4 @@
-export interface Noticia {
+export interface INoticia {
   author: string;
   content: string;
   country: string;
