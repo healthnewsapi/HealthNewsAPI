@@ -4,10 +4,14 @@ import { Noticia } from "../model/noticiasModel";
 import { client } from "../server/dbconnect";
 import { Router } from "./Router";
 
+interface IUpdateNews {
+  doc: Noticia;
+}
+
 class Noticias implements Router {
   public applyRoutes(appServer: restify.Server) {
 
-    // ROUTER: Get all the news
+    // ROUTE: Get all the news
     appServer.get("/noticias", async (req, resp, next) => {
       const searchParams: RequestParams.Search = {
         index: "noticias",
@@ -23,14 +27,30 @@ class Noticias implements Router {
       return next();
     });
 
-    // ROUTER: Add a news
+    // ROUTE: Search for ID
+    appServer.get("/noticias/:id", async (req, resp, next) => {
+      const doc: RequestParams.Get = {
+        id: req.params.id,
+        index: "noticias"
+      };
+
+      try {
+        const result = await client.get(doc);
+        resp.json(result.body);
+        console.log(result);
+      } catch (err) {
+          console.error(err);
+          resp.send(err);
+      }
+      return next();
+    });
+
+    // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
       const doc: RequestParams.Index<Noticia> = {
         index: "noticias",
         body: req.body
       };
-
-      console.log(doc.body);
 
       try {
         const result = await client.index(doc);
@@ -41,18 +61,63 @@ class Noticias implements Router {
           resp.send(err);
       }
       return next();
-
     });
 
-    // ROUTER: Change a news
-    appServer.put("/noticias", (req, resp, next) => {
-      resp.json({message: "Noticia alterada"});
+    // ROUTE: Change a news
+    // If the ID exists the document is updated, if not, it creates a new document
+    appServer.put("/noticias/:id", async (req, resp, next) => {
+      const doc: RequestParams.Index<Noticia> = {
+        id: req.params.id,
+        index: "noticias",
+        body: req.body
+      };
+
+      try {
+        const result = await client.index(doc);
+        resp.json(result.body);
+        console.log(result);
+      } catch (err) {
+          console.error(err);
+          resp.send(err);
+      }
       return next();
     });
 
-    // ROUTER: Delete a news
-    appServer.del("/noticias", (req, resp, next) => {
-      resp.json({message: "Noticia apagada"});
+    appServer.patch("/noticias/:id", async (req, resp, next) => {
+      const docParams: RequestParams.Update<IUpdateNews> = {
+        id: req.params.id,
+        index: "noticias",
+        body: {
+          doc: req.body
+        }
+      };
+      console.log(req.body);
+      try {
+        const result = await client.update(docParams);
+        resp.json(result.body);
+        console.log(result);
+      } catch (err) {
+          console.log(err);
+          resp.json(err.meta.body.error);
+      }
+      return next();
+    });
+
+    // ROUTE: Delete a news
+    appServer.del("/noticias/:id", async (req, resp, next) => {
+      const docReference: RequestParams.Delete = {
+        id: req.params.id,
+        index: "noticias"
+      };
+
+      try {
+        const result = await client.delete(docReference);
+        resp.json(result);
+        console.log(result);
+      } catch (err) {
+          console.error(err);
+          resp.send(err);
+      }
       return next();
     });
   }
