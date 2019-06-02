@@ -1,5 +1,5 @@
 import * as restify from "restify";
 
-export interface Router {
+export interface IRouter {
   applyRoutes(appServer: restify.Server): void;
 }

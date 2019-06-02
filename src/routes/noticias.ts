@@ -1,14 +1,14 @@
 import { ApiResponse, RequestParams } from "@elastic/elasticsearch";
 import * as restify from "restify";
-import { Noticia } from "../model/noticiasModel";
+import { INoticia } from "../model/noticiasModel";
 import { client } from "../server/dbconnect";
-import { Router } from "./Router";
+import { IRouter } from "./Router";
 
 interface IUpdateNews {
-  doc: Noticia;
+  doc: INoticia;
 }
 
-class Noticias implements Router {
+class Noticias implements IRouter {
   public applyRoutes(appServer: restify.Server) {
 
     // ROUTE: Get all the news
@@ -47,7 +47,7 @@ class Noticias implements Router {
 
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
-      const doc: RequestParams.Index<Noticia> = {
+      const doc: RequestParams.Index<INoticia> = {
         index: "noticias",
         body: req.body
       };
@@ -66,7 +66,7 @@ class Noticias implements Router {
     // ROUTE: Change a news
     // If the ID exists the document is updated, if not, it creates a new document
     appServer.put("/noticias/:id", async (req, resp, next) => {
-      const doc: RequestParams.Index<Noticia> = {
+      const doc: RequestParams.Index<INoticia> = {
         id: req.params.id,
         index: "noticias",
         body: req.body
