@@ -8,7 +8,7 @@ export class Server {
   constructor() {
     this.appServer = restify.createServer({
       name: "Database news",
-      version: "1.0.0"
+      version: "1.0.0",
     });
   }
 

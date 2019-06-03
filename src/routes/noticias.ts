@@ -17,9 +17,9 @@ class Noticias implements IRouter {
         index: "noticias",
         body: {
           query: {
-            match_all: {}
-          }
-        }
+            match_all: {},
+          },
+        },
       };
       const { body }: any = await client.search(searchParams)
                             .catch((err: Error) => { console.log(err); } );
@@ -31,7 +31,7 @@ class Noticias implements IRouter {
     appServer.get("/noticias/:id", async (req, resp, next) => {
       const doc: RequestParams.Get = {
         id: req.params.id,
-        index: "noticias"
+        index: "noticias",
       };
 
       try {
@@ -40,26 +40,38 @@ class Noticias implements IRouter {
         console.log(result);
       } catch (err) {
           console.error(err);
-          resp.send(err);
+          resp.json(err);
       }
       return next();
     });
 
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
-      const doc: RequestParams.Index<INoticia> = {
-        index: "noticias",
-        body: req.body
-      };
+      const docs = new Array();
+
+      if (!(req.body instanceof Array)) {
+        req.body = new Array(req.body);
+      }
+
+      for (const noticiaItem of req.body) {
+        docs.push({ index: {} });
+        docs.push(noticiaItem);
+      }
 
       try {
-        const result = await client.index(doc);
-        resp.json(result.body);
-        console.log(result);
+        const { body: bulkResponse } = await client.bulk({
+          index: "noticias",
+          body: docs,
+        });
+        if (bulkResponse.errors) {
+          console.log(bulkResponse);
+          resp.json(bulkResponse);
+        }
       } catch (err) {
-          console.error(err);
-          resp.send(err);
-      }
+        console.error(err);
+        resp.json(err);
+    }
+      resp.json(docs);
       return next();
     });
 
@@ -69,7 +81,7 @@ class Noticias implements IRouter {
       const doc: RequestParams.Index<INoticia> = {
         id: req.params.id,
         index: "noticias",
-        body: req.body
+        body: req.body,
       };
 
       try {
@@ -78,7 +90,7 @@ class Noticias implements IRouter {
         console.log(result);
       } catch (err) {
           console.error(err);
-          resp.send(err);
+          resp.json(err);
       }
       return next();
     });
@@ -88,8 +100,8 @@ class Noticias implements IRouter {
         id: req.params.id,
         index: "noticias",
         body: {
-          doc: req.body
-        }
+          doc: req.body,
+        },
       };
       console.log(req.body);
       try {
@@ -107,7 +119,7 @@ class Noticias implements IRouter {
     appServer.del("/noticias/:id", async (req, resp, next) => {
       const docReference: RequestParams.Delete = {
         id: req.params.id,
-        index: "noticias"
+        index: "noticias",
       };
 
       try {
@@ -116,7 +128,7 @@ class Noticias implements IRouter {
         console.log(result);
       } catch (err) {
           console.error(err);
-          resp.send(err);
+          resp.json(err);
       }
       return next();
     });

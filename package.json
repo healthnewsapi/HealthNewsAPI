@@ -4,7 +4,8 @@
   "description": "A server to control the acess to database of Sala de Situcao",
   "main": "dist/main.js",
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "lint": "tslint -c tslint.json -p tsconfig.json --fix",
+    "prebuild": "npm run lint",
     "build": "tsc",
     "build:watch": "tsc -w",
     "prestart": "npm run build",
