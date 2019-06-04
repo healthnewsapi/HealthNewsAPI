@@ -2,7 +2,7 @@ import { ApiResponse, RequestParams } from "@elastic/elasticsearch";
 import * as restify from "restify";
 import { INoticia } from "../model/noticiasModel";
 import { client } from "../server/dbconnect";
-import { IRouter } from "./Router";
+import { IRouter } from "./router";
 
 interface IUpdateNews {
   doc: INoticia;
