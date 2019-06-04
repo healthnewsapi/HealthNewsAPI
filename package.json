@@ -1,10 +1,10 @@
 {
-  "name": "db-sala-de-situacao",
+  "name": "healthnewsapi",
   "version": "1.0.0",
   "description": "A server to control the acess to database of Sala de Situcao",
   "main": "dist/main.js",
   "scripts": {
-    "lint": "tslint -c tslint.json -p tsconfig.json --fix",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
     "prebuild": "npm run lint",
     "build": "tsc",
     "build:watch": "tsc -w",
@@ -31,9 +31,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/joao-victor-silva/db-sala-de-situacao/issues"
+    "url": "https://github.com/joao-victor-silva/healthnewsapi/issues"
   },
-  "homepage": "https://github.com/joao-victor-silva/db-sala-de-situacao#readme",
+  "homepage": "https://github.com/joao-victor-silva/healthnewsapi#readme",
   "devDependencies": {
     "@types/node": "^12.0.4",
     "@types/restify": "^7.2.11",

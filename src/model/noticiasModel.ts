@@ -5,11 +5,11 @@ export interface INoticia {
   date: string;
   description: string;
   disease: string;
-  published_at: string;
+  publishedAt: string;
   region: string;
   score: number;
   source: string;
   title: string;
   url: string;
-  url_to_image: string;
+  urlToImage: string;
 }
