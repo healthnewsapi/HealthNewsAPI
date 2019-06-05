@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joao-victor-silva/db-sala-de-situacao.git"
+    "url": "git+https://github.com/healthnewsapi/HealthNewsAPI"
   },
   "keywords": [
     "db",
@@ -37,9 +37,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/joao-victor-silva/healthnewsapi/issues"
+    "url": "https://github.com/healthnewsapi/HealthNewsAPI/issues"
   },
-  "homepage": "https://github.com/joao-victor-silva/healthnewsapi#readme",
+  "homepage": "https://github.com/healthnewsapi/HealthNewsAPI#readme",
   "devDependencies": {
     "@types/node": "^12.0.4",
     "@types/restify": "^7.2.11",

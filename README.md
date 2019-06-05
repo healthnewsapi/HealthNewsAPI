@@ -145,7 +145,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Versionamento
 
-Nós usamos [SemVer](http://semver.org/) para versionamento. Para mais versões Disponíveis, veja [Versões](https://github.com/joao-victor-silva/healthnewsapi/tags). 
+Nós usamos [SemVer](http://semver.org/) para versionamento. Para mais versões Disponíveis, veja [Versões](https://github.com/healthnewsapi/HealthNewsAPI/tags). 
 
 ## Autores
 
