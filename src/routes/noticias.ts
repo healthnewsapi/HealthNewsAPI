@@ -46,8 +46,7 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.get(doc);
-        resp.json(result.body);
-        console.log(result);
+        resp.json(responsePagination([result.body]));
       } catch (err) {
           console.error(err);
           resp.json(err);
