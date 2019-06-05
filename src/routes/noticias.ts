@@ -1,6 +1,7 @@
 import { ApiResponse, RequestParams } from "@elastic/elasticsearch";
 import * as restify from "restify";
 import { INoticia } from "../model/noticiasModel";
+import { responsePagination } from "../routes/utils";
 import { client } from "../server/dbconnect";
 import { IRouter } from "./router";
 
@@ -13,8 +14,14 @@ class Noticias implements IRouter {
 
     // ROUTE: Get all the news
     appServer.get("/noticias", async (req, resp, next) => {
+      const limit = parseInt(req.query.limit, 10);
+      const page = parseInt(req.query.page, 10) || 1;
+      const skip = (page - 1 ) * limit;
+
       const searchParams: RequestParams.Search = {
         index: "noticias",
+        size: limit || 10,
+        from: skip,
         body: {
           query: {
             match_all: {},
@@ -23,7 +30,10 @@ class Noticias implements IRouter {
       };
       const { body }: any = await client.search(searchParams)
                             .catch((err: Error) => { console.log(err); } );
-      resp.json(body.hits.hits);
+
+      const totalItems = body.hits.total.value;
+
+      resp.json(responsePagination(body, limit, page, totalItems));
       return next();
     });
 
@@ -36,8 +46,7 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.get(doc);
-        resp.json(result.body);
-        console.log(result);
+        resp.json(responsePagination([result.body]));
       } catch (err) {
           console.error(err);
           resp.json(err);

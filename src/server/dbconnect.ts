@@ -34,7 +34,7 @@ class UpDataBase {
           markedClipping: { type: "date" },
           mapViews: { type: "long" },
           mapDetails: { type: "long" },
-        }
+        },
       },
     };
 
