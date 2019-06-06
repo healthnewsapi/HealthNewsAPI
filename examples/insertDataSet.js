@@ -3,9 +3,7 @@ const http = require("http");
 
 // function request
 const postNews = (news) => {
-    const postData = JSON.stringify({
-        news
-      });
+    const postData = JSON.stringify(news);
     const options = {
         hostname: "127.0.0.1",
         port: 8080,
