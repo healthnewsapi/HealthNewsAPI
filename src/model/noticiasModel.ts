@@ -1,4 +1,5 @@
 export interface INoticia {
+  id: string;
   author: string;
   content: string;
   insertionDate: string;

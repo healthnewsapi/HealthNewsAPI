@@ -18,7 +18,7 @@ class UpDataBase {
       content: { type: "text" },
       insertionDate: { type: "date" },
       description: { type: "text" },
-      disease: { type: "text" },
+      event: { type: "text" },
       publishedAt: { type: "date" },
       score: { type: "double" },
       source: { type: "text" },
