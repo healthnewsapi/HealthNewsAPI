@@ -17,7 +17,6 @@ class Noticias implements IRouter {
       const limit = parseInt(req.query.limit, 10) || 10;
       const page = parseInt(req.query.page, 10) || 1;
       const skip = (page - 1 ) * limit;
-
       const searchParams: RequestParams.Search = {
         index: "noticias",
         size: limit,
@@ -36,7 +35,8 @@ class Noticias implements IRouter {
         return Object.assign({id: obj._id}, obj._source);
       });
 
-      resp.json(responsePagination(body, limit, page, totalItems));
+      resp.json(responsePagination(body, req.headers.host as string, req.url as string,
+                                  limit, page, totalItems));
       return next();
     });
 
@@ -50,7 +50,8 @@ class Noticias implements IRouter {
       try {
         const result = await client.get(doc);
         resp.json(responsePagination([Object.assign({id: result.body._id},
-                                                    result.body._source)]));
+                                                    result.body._source)], req.headers.host as string,
+                                                    req.url as string));
       } catch (err) {
           console.error(err);
           resp.json(err);
@@ -60,31 +61,23 @@ class Noticias implements IRouter {
 
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
-      const docs = new Array();
-
-      if (!(req.body instanceof Array)) {
-        req.body = new Array(req.body);
-      }
-
-      for (const noticiaItem of req.body) {
-        docs.push({ index: {} });
-        docs.push(noticiaItem);
-      }
+    // ROUTER: Add a news
+      let dataResponse;
+      const doc: RequestParams.Index<INoticia> = {
+        index: "noticias",
+        body: req.body,
+      };
 
       try {
-        const { body: bulkResponse } = await client.bulk({
-          index: "noticias",
-          body: docs,
-        });
-        if (bulkResponse.errors) {
-          console.log(bulkResponse);
-          resp.json(bulkResponse);
-        }
+        const result = await client.index(doc);
+        dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
+        resp.json(responsePagination(dataResponse,
+                                    req.headers.host as string,
+                                    req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
       } catch (err) {
-        console.error(err);
-        resp.json(err);
-    }
-      resp.json(docs);
+          console.error(err);
+          resp.send(err);
+      }
       return next();
     });
 
