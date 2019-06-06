@@ -9,7 +9,11 @@ export const responsePagination = (document: any, baseUrl: string, urlQuery: str
     response.links.prev = `http://${baseUrl}/noticias?limit=${limit}&page=${page - 1}`;
   }
 
-  response.links.self = url || `http://${baseUrl}/noticias?limit=${limit}&page=${page}`;
+  if (url) {
+    response.links.self = `http://${baseUrl}${url}`;
+  } else {
+    response.links.self = `http://${baseUrl}/noticias?limit=${limit}&page=${page}`;
+  }
 
   if ( page * limit < totalItems ) {
       response.links.next = `http://${baseUrl}/noticias?limit=${limit}&page=${page + 1}`;
