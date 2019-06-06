@@ -7,7 +7,7 @@ const postNews = (news) => {
         news
       });
     const options = {
-        hostname: "165.22.190.11",
+        hostname: "127.0.0.1",
         port: 8080,
         path: "/noticias",
         method: "POST",
@@ -25,12 +25,12 @@ const postNews = (news) => {
             console.log(`BODY: ${chunk}`);
         });
         res.on("end", () => {
-            console.log("No more data in response.");
+            console.log("Request end");
         });
     });
 
     req.on("error", (e) => {
-        console.error(`problem with request: ${e.message}`);
+        console.error(`Error: ${e.message}`);
     });
 
     req.write(postData);
@@ -38,7 +38,7 @@ const postNews = (news) => {
 }
 
 
-let jsonData = JSON.parse(fs.readFileSync("retrieve.json", "utf-8"));
+let jsonData = JSON.parse(fs.readFileSync("dataSet.json", "utf-8"));
 
 jsonData.map((news) => {
     postNews(news);
