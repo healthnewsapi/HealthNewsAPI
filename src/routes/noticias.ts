@@ -1,4 +1,4 @@
-import { ApiResponse, RequestParams } from "@elastic/elasticsearch";
+import { RequestParams } from "@elastic/elasticsearch";
 import * as restify from "restify";
 import { INoticia } from "../model/noticiasModel";
 import { responsePagination } from "../routes/utils";
@@ -14,13 +14,13 @@ class Noticias implements IRouter {
 
     // ROUTE: Get all the news
     appServer.get("/noticias", async (req, resp, next) => {
-      const limit = parseInt(req.query.limit, 10);
+      const limit = parseInt(req.query.limit, 10) || 10;
       const page = parseInt(req.query.page, 10) || 1;
       const skip = (page - 1 ) * limit;
 
       const searchParams: RequestParams.Search = {
         index: "noticias",
-        size: limit || 10,
+        size: limit,
         from: skip,
         body: {
           query: {
@@ -28,10 +28,13 @@ class Noticias implements IRouter {
           },
         },
       };
-      const { body }: any = await client.search(searchParams)
+      let { body }: any = await client.search(searchParams)
                             .catch((err: Error) => { console.log(err); } );
 
       const totalItems = body.hits.total.value;
+      body = body.hits.hits.map((obj: any) => {
+        return Object.assign({id: obj._id}, obj._source);
+      });
 
       resp.json(responsePagination(body, limit, page, totalItems));
       return next();
@@ -46,7 +49,8 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.get(doc);
-        resp.json(responsePagination([result.body]));
+        resp.json(responsePagination([Object.assign({id: result.body._id},
+                                                    result.body._source)]));
       } catch (err) {
           console.error(err);
           resp.json(err);

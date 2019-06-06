@@ -1,7 +1,6 @@
 export const responsePagination = (document: any, limit = 1, page = 1,
                                    totalItems = 1) => {
   const response: any = {
-    meta: {},
     data: document,
     links: new Object(),
   };
