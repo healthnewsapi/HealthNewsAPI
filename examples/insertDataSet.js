@@ -5,7 +5,7 @@ const http = require("http");
 const postNews = (news) => {
     const postData = JSON.stringify(news);
     const options = {
-        hostname: "127.0.0.1" || process.env.URL_SERVER_HEALTH_NEWS_API,
+        hostname: process.env.URL_SERVER_HEALTH_NEWS_API || "127.0.0.1",
         port: 8080,
         path: "/noticias",
         method: "POST",
