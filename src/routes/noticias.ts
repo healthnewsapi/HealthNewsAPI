@@ -17,7 +17,7 @@ class Noticias implements IRouter {
       let querySearch: any;
 
       const queries = Object.assign({}, req.query);
-      delete queries.limit;
+      delete queries.items;
       delete queries.page;
 
       if (Object.entries(queries).length) {
@@ -36,12 +36,12 @@ class Noticias implements IRouter {
           match_all: {},
         };
       }
-      const limit = parseInt(req.query.limit, 10) || 10;
+      const items = parseInt(req.query.items, 10) || 10;
       const page = parseInt(req.query.page, 10) || 1;
-      const skip = (page - 1 ) * limit;
+      const skip = (page - 1 ) * items;
       const searchParams: RequestParams.Search = {
         index: "noticias",
-        size: limit,
+        size: items,
         from: skip,
         body: {
           query: querySearch,
@@ -56,7 +56,7 @@ class Noticias implements IRouter {
       });
 
       resp.json(responsePagination(body, req.headers.host as string, req.url as string,
-                                  limit, page, totalItems, undefined, URLquery));
+                                  items, page, totalItems, undefined, URLquery));
       return next();
     });
 
