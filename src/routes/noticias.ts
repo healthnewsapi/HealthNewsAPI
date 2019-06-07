@@ -47,16 +47,21 @@ class Noticias implements IRouter {
           query: querySearch,
         },
       };
-      let { body }: any = await client.search(searchParams)
-                            .catch((err: Error) => { console.log(err); } );
 
-      const totalItems = body.hits.total.value;
-      body = body.hits.hits.map((obj: any) => {
-        return Object.assign({id: obj._id}, obj._source);
-      });
+      try {
+        let { body }: any = await client.search(searchParams);
 
-      resp.json(responsePagination(body, req.headers.host as string, req.url as string,
-                                  items, page, totalItems, undefined, URLquery));
+        const totalItems = body.hits.total.value;
+        body = body.hits.hits.map((obj: any) => {
+          return Object.assign({id: obj._id}, obj._source);
+        });
+
+        resp.json(responsePagination(body, req.headers.host as string, req.url as string,
+                                    items, page, totalItems, undefined, URLquery));
+      } catch (err) {
+        next(err);
+      }
+
       return next();
     });
 
@@ -74,9 +79,9 @@ class Noticias implements IRouter {
                                                     req.headers.host as string,
                                                     req.url as string, 1, 1, 1, `/noticias/${result.body._id}`));
       } catch (err) {
-          console.error(err);
-          resp.json(err);
+        next(err);
       }
+
       return next();
     });
 
@@ -96,8 +101,7 @@ class Noticias implements IRouter {
                                     req.headers.host as string,
                                     req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
       } catch (err) {
-          console.error(err);
-          resp.send(err);
+        next(err);
       }
       return next();
     });
@@ -116,8 +120,7 @@ class Noticias implements IRouter {
         resp.json(result.body);
         console.log(result);
       } catch (err) {
-          console.error(err);
-          resp.json(err);
+        next(err);
       }
       return next();
     });
@@ -136,8 +139,7 @@ class Noticias implements IRouter {
         resp.json(result.body);
         console.log(result);
       } catch (err) {
-          console.log(err);
-          resp.json(err.meta.body.error);
+        next(err);
       }
       return next();
     });
@@ -154,8 +156,7 @@ class Noticias implements IRouter {
         resp.json(result);
         console.log(result);
       } catch (err) {
-          console.error(err);
-          resp.json(err);
+        next(err);
       }
       return next();
     });

@@ -12,10 +12,33 @@ API do Banco de dados de notícias da Sala de Situação em Saúde - FS
 
 ## Iniciando a aplicação
 
+Há duas formas disponíveis de executar a aplicação, via docker ou usando o npm:
+
+##### Executando a aplicação com o docker-compose:
 Clone o repositório
 
 ```sh
-git clone <url_do_repositorio.git>
+git clone https://github.com/healthnewsapi/HealthNewsAPI.git
+```
+
+Navegue até a pasta do projeto
+
+```sh
+cd HealthNewsAPI
+```
+
+Execute a aplicação
+
+```sh
+docker-compose up
+```
+Pronto! A aplicação está em execução, por padrão a aplicação está disponível na porta _8080_
+
+##### Executando com npm
+Clone o repositório
+
+```sh
+git clone https://github.com/healthnewsapi/HealthNewsAPI.git
 ```
 
 Instale as dependências
@@ -34,6 +57,7 @@ Por fim, execute a aplicação
 ```sh
 npm start
 ```
+Pronto! A aplicação está em execução, por padrão a aplicação está disponível na porta _8080_
 
 ## Visão geral da API
 
