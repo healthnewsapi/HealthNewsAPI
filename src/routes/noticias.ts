@@ -15,10 +15,9 @@ class Noticias implements IRouter {
     // ROUTE: Get all the news
     appServer.get("/noticias", async (req, resp, next) => {
       let querySearch: any;
-      const queries = req.query;
+      const queries = Object.assign({}, req.query);
       delete queries.limit;
       delete queries.page;
-
       if (Object.entries(queries).length) {
         querySearch = {
           bool: {

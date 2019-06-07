@@ -2,22 +2,26 @@ export const responsePagination = (document: any, baseUrl: string, urlQuery: str
                                    totalItems = 1, url?: string) => {
   const response: any = {
     data: document,
-    links: new Object(),
+    links: [],
   };
 
   if (page > 1) {
-    response.links.prev = `http://${baseUrl}/noticias?limit=${limit}&page=${page - 1}`;
+    response.links.push({ rel: "prev",
+                          href: `http://${baseUrl}/noticias?limit=${limit}&page=${page - 1}`});
   }
 
   if (url) {
-    response.links.self = `http://${baseUrl}${url}`;
+    response.links.push({ rel: "self",
+                          href: `http://${baseUrl}${url}`});
   } else {
-    response.links.self = `http://${baseUrl}/noticias?limit=${limit}&page=${page}`;
+    response.links.push({ rel: "self",
+                          href: `http://${baseUrl}/noticias?limit=${limit}&page=${page}`});
   }
 
   if ( page * limit < totalItems ) {
-      response.links.next = `http://${baseUrl}/noticias?limit=${limit}&page=${page + 1}`;
-    }
+      response.links.push({ rel: "next",
+                            href: `http://${baseUrl}/noticias?limit=${limit}&page=${page + 1}`});
+  }
 
   return response;
 };
