@@ -11,14 +11,17 @@ interface IUpdateNews {
 
 class Noticias implements IRouter {
   public applyRoutes(appServer: restify.Server) {
-
     // ROUTE: Get all the news
     appServer.get("/noticias", async (req, resp, next) => {
+      let URLquery = "";
       let querySearch: any;
+
       const queries = Object.assign({}, req.query);
       delete queries.limit;
       delete queries.page;
+
       if (Object.entries(queries).length) {
+        URLquery = Object.entries(queries).map((value) => value.join("=")).join("&").concat("&");
         querySearch = {
           bool: {
             must: [],
@@ -53,7 +56,7 @@ class Noticias implements IRouter {
       });
 
       resp.json(responsePagination(body, req.headers.host as string, req.url as string,
-                                  limit, page, totalItems));
+                                  limit, page, totalItems, undefined, URLquery));
       return next();
     });
 
