@@ -14,6 +14,26 @@ class Noticias implements IRouter {
 
     // ROUTE: Get all the news
     appServer.get("/noticias", async (req, resp, next) => {
+      let querySearch: any;
+      const queries = req.query;
+      delete queries.limit;
+      delete queries.page;
+
+      if (Object.entries(queries).length) {
+        querySearch = {
+          bool: {
+            must: [],
+          },
+        };
+        Object.keys(queries).map((key: any ) => {
+          querySearch.bool.must.push(({match: {[key]: queries[key]}}));
+        });
+        console.log(querySearch.bool.must);
+      } else {
+        querySearch = {
+          match_all: {},
+        };
+      }
       const limit = parseInt(req.query.limit, 10) || 10;
       const page = parseInt(req.query.page, 10) || 1;
       const skip = (page - 1 ) * limit;
@@ -22,9 +42,7 @@ class Noticias implements IRouter {
         size: limit,
         from: skip,
         body: {
-          query: {
-            match_all: {},
-          },
+          query: querySearch,
         },
       };
       let { body }: any = await client.search(searchParams)
