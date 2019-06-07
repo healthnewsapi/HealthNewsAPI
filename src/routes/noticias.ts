@@ -88,7 +88,6 @@ class Noticias implements IRouter {
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
     // ROUTER: Add a news
-      let dataResponse;
       const doc: RequestParams.Index<INoticia> = {
         index: "noticias",
         body: req.body,
@@ -96,7 +95,7 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.index(doc);
-        dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
+        const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
         resp.json(responsePagination(dataResponse,
                                     req.headers.host as string,
                                     req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
@@ -117,8 +116,10 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.index(doc);
-        resp.json(result.body);
-        console.log(result);
+        const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
+        resp.json(responsePagination(dataResponse,
+                                    req.headers.host as string,
+                                    req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
       } catch (err) {
         next(err);
       }
@@ -136,8 +137,10 @@ class Noticias implements IRouter {
       console.log(req.body);
       try {
         const result = await client.update(docParams);
-        resp.json(result.body);
-        console.log(result);
+        const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
+        resp.json(responsePagination(dataResponse,
+                                    req.headers.host as string,
+                                    req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
       } catch (err) {
         next(err);
       }
@@ -153,8 +156,7 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.delete(docReference);
-        resp.json(result);
-        console.log(result);
+        resp.json({result: result.body.result});
       } catch (err) {
         next(err);
       }
