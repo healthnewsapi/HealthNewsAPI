@@ -8,11 +8,12 @@ import { Server } from "../src/server/server";
 let serverTest: Server;
 let andressTest: string;
 
-beforeAll(() => {
+beforeAll(async () => {
   environment.server.port = process.env.SERVER_PORT_API || 3001;
   andressTest = `http://localhost:${environment.server.port}`;
   serverTest = new Server();
   serverTest.startServer([noticias]);
+  await new Promise((done) => setTimeout(done, 2000));
 });
 
 afterAll(() => {
@@ -112,4 +113,3 @@ test("GET /noticias/idNonExistent", () => {
             expect(response.status).toBe(404);
           }).catch(fail);
 });
-
