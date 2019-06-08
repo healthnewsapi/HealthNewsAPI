@@ -3,6 +3,7 @@ import * as restify from "restify";
 import { INoticia } from "../model/noticiasModel";
 import { responsePagination } from "../routes/utils";
 import { client } from "../server/dbconnect";
+import { CustomError } from "../server/error.handler";
 import { IRouter } from "./router";
 
 interface IUpdateNews {
@@ -30,7 +31,6 @@ class Noticias implements IRouter {
         Object.keys(queries).map((key: any ) => {
           querySearch.bool.must.push(({match: {[key]: queries[key]}}));
         });
-        console.log(querySearch.bool.must);
       } else {
         querySearch = {
           match_all: {},
@@ -95,7 +95,10 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.index(doc);
-        const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
+        const dataResponse = Object.assign({id: result.body._id},
+                                            JSON.parse(result.meta.request.params.body as any),
+                                            {indicators: {postedClipping: null, markedClipping: null,
+                                            mapViews: 0, mapDetails: 0}});
         resp.json(responsePagination(dataResponse,
                                     req.headers.host as string,
                                     req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
@@ -114,7 +117,17 @@ class Noticias implements IRouter {
         body: req.body,
       };
 
+      const validator: RequestParams.Exists = {
+        id: req.params.id,
+        index: "noticias",
+      };
+
       try {
+        const validatorResult = await client.exists(validator);
+        if (validatorResult.statusCode === 404) {
+          const err = new CustomError("Response Error", "ResponseError", 404);
+          throw err;
+        }
         const result = await client.index(doc);
         const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
         resp.json(responsePagination(dataResponse,
