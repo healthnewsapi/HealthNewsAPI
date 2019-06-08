@@ -5,17 +5,17 @@
   "main": "dist/main.js",
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "prebuild": "npm run lint",
+    "prebuild": "yarn run lint",
     "build": "tsc",
     "build:watch": "tsc -w",
-    "prestart": "npm run build",
+    "prestart": "yarn run build",
     "start": "node .",
     "test": "jest"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "npm run lint && npm test"
+      "pre-commit": "yarn run lint",
+      "pre-push": "yarn run lint && yarn test"
     }
   },
   "repository": {
