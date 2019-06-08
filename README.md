@@ -1,4 +1,5 @@
 # HealthNewsAPI
+[![Build Status](https://travis-ci.org/healthnewsapi/HealthNewsAPI.svg?branch=master)](https://travis-ci.org/healthnewsapi/HealthNewsAPI)
 
 API do Banco de dados de notícias da Sala de Situação em Saúde - FS
 
