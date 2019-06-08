@@ -19,27 +19,6 @@ afterAll(() => {
   serverTest.appServer.close();
 });
 
-test("GET /noticias", () => {
-  return request(andressTest)
-          .get("/noticias")
-          .then((response: request.Response) => {
-            if (response.body.data.length > 0) {
-              expect(response.status).toBe(200);
-            } else {
-              expect(response.status).toBe(404);
-            }
-            expect(response.body.data).toBeInstanceOf(Array);
-          }).catch(fail);
-});
-
-test("GET /noticias/idNonExistent", () => {
-  return request(andressTest)
-          .get("/noticias/idNonExistent")
-          .then((response: request.Response) => {
-            expect(response.status).toBe(404);
-          }).catch(fail);
-});
-
 test("POST /noticias", () => {
   return request(andressTest)
           .post("/noticias")
@@ -112,3 +91,25 @@ test("PATCH /noticias/id", () => {
                 expect(response.body.data.doc.uf).toBe("GO");
               }).catch(fail);
 });
+
+test("GET /noticias", () => {
+  return request(andressTest)
+          .get("/noticias")
+          .then((response: request.Response) => {
+            if (response.body.data) {
+              expect(response.status).toBe(200);
+            } else {
+              expect(response.status).toBe(400);
+            }
+            expect(response.body.data).toBeInstanceOf(Array);
+          }).catch(fail);
+});
+
+test("GET /noticias/idNonExistent", () => {
+  return request(andressTest)
+          .get("/noticias/idNonExistent")
+          .then((response: request.Response) => {
+            expect(response.status).toBe(404);
+          }).catch(fail);
+});
+
