@@ -31,7 +31,7 @@ cd HealthNewsAPI
 Execute a aplicação
 
 ```sh
-docker-compose up
+docker-compose up   # no caso de erro tente como root: sudo docker-compose up
 ```
 Pronto! A aplicação está em execução, por padrão a aplicação está disponível na porta _8080_
 
@@ -87,19 +87,22 @@ POST /noticias
 
 // O body da requisição deve conter o documento JSON a ser inserido
 {
-    "author": "Nome do autor",
-    "content": "Conteudo",
-    "country": "Pais",
-    "date": "AAAA-MM-DD",
-    "description": "Descricao",
-    "disease": "Doenca",
-    "published_at": "AAAA-MM-DD",
-    "region": "Regiao",
-    "score": 1.0,
-    "source": "Fonte da noticia",
-    "title": "Titulo",
-    "url": "url da noticia",
-    "url_to_image": "url da imagem"
+  "author": "Nome do autor",
+  "content": "Esta é uma notícia sobre saúde...",
+  "description": "Descrição da notícia",
+  "event": [
+    "dengue",
+    "chuva"
+  ],
+  "publishedAt": "2017-07-21T17:32:28Z",
+  "score": 6.2,
+  "source": "Nome do site da noticia",
+  "title": "Titulo da noticia",
+  "country": "BR",
+  "region": "Centro-oeste",
+  "uf": "DF",
+  "url": "sitedanoticia.com/noticia1",
+  "urlToImage": "sitedanoticia.com/noticia1/image.jpg"
 }
 ```
 
@@ -109,20 +112,22 @@ _Substituir uma notícia:_
 PUT /noticias/ID
 
 // O body da requisição deve conter o NOVO documento JSON a ser inserido no ID indicado
+// Neste metódo toda a notícia é substituida. 
+// Para alterar apenas os campos da notícia USE O MÉTODO PATCH
 {
-    "author": "Nome do autor",
-    "content": "Conteudo ",
-    "country": "Pais",
-    "date": "AAAA-MM-DD",
-    "description": "Descricao",
-    "disease": "Doenca",
-    "published_at": "AAAA-MM-DD",
-    "region": "Regiao",
-    "score": 1.0,
-    "source": "Fonte da noticia",
-    "title": "Titulo",
-    "url": "url da noticia",
-    "url_to_image": "url da imagem"
+  "author": "Novo nome do autor",
+  "content": "Novo conteúdo da notícia",
+  "description": "Nova descrição da notícia",
+  "event": [ "novo evento" ],
+  "publishedAt": "2018-08-22T18:43:29Z",
+  "score": 6.5,
+  "source": "novo nome do site da noticia",
+  "title": "novo titulo da noticia",
+  "country": "BR",
+  "region": "nova regiao",
+  "uf": "uf",
+  "url": "novositedanoticia.com/noticia1",
+  "urlToImage": "novositedanoticia.com/noticia1/image.jpg"
 }
 ```
 
@@ -138,33 +143,13 @@ PATCH /noticias/{ID}
 }
 ```
 
+_Deletar uma notícia:_
 
-<!-- ## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+```javascript
+DELETE /noticias/ID
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
- -->
-
-## Construído com
+## Construído com:
 
 * [Restify](http://restify.com/)
 
