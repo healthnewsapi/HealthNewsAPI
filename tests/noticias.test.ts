@@ -23,7 +23,11 @@ test("GET /noticias", () => {
   return request(andressTest)
           .get("/noticias")
           .then((response: request.Response) => {
-            expect(response.status).toBe(200);
+            if (response.body.data.length > 0) {
+              expect(response.status).toBe(200);
+            } else {
+              expect(response.status).toBe(404);
+            }
             expect(response.body.data).toBeInstanceOf(Array);
           }).catch(fail);
 });
