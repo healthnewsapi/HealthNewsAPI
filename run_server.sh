@@ -5,4 +5,4 @@ do
     sleep 1s
 done
 
-npm run start
+yarn start

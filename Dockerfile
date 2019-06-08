@@ -1,8 +1,9 @@
 FROM node:10
-RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
-WORKDIR /home/node/app
-COPY --chown=node:node . .
-USER node
+RUN mkdir -p /app
+WORKDIR /app
+COPY package.json /app
+COPY package-lock.json /app
+RUN yarn
+COPY . /app
 EXPOSE 8080
-RUN npm install
 CMD ["./run_server.sh"]
