@@ -74,8 +74,8 @@ class Noticias implements IRouter {
 
       try {
         const result = await client.get(doc);
-        resp.json(responsePagination([Object.assign({id: result.body._id},
-                                                    result.body._source)],
+        resp.json(responsePagination(Object.assign({id: result.body._id},
+                                                    result.body._source),
                                                     req.headers.host as string,
                                                     req.url as string, 1, 1, 1, `/noticias/${result.body._id}`));
       } catch (err) {
