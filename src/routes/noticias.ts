@@ -88,6 +88,9 @@ class Noticias implements IRouter {
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
     // ROUTER: Add a news
+      const body = Object.assign(req.body, {indicators: {postedClipping: null, markedClipping: null,
+                                            mapViews: 0, mapDetails: 0}});
+
       const doc: RequestParams.Index<INoticia> = {
         index: "noticias",
         body: req.body,
@@ -96,9 +99,7 @@ class Noticias implements IRouter {
       try {
         const result = await client.index(doc);
         const dataResponse = Object.assign({id: result.body._id},
-                                            JSON.parse(result.meta.request.params.body as any),
-                                            {indicators: {postedClipping: null, markedClipping: null,
-                                            mapViews: 0, mapDetails: 0}});
+                                            JSON.parse(result.meta.request.params.body as any));
         resp.json(responsePagination(dataResponse,
                                     req.headers.host as string,
                                     req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
