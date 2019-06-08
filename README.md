@@ -5,7 +5,7 @@ API do Banco de dados de notícias da Sala de Situação em Saúde - FS
 
 ## Pré-requisitos
 
-> Para rodar a aplicação localmente você precisa de:
+> Para executar a aplicação localmente você precisa de:
 
 * [Node.js](https://nodejs.org/)
 * [Docker](https://www.docker.com/)
@@ -13,7 +13,7 @@ API do Banco de dados de notícias da Sala de Situação em Saúde - FS
 
 ## Iniciando a aplicação
 
-Há duas formas disponíveis de executar a aplicação, via docker ou usando o npm:
+Há duas formas disponíveis de executar a aplicação, via docker ou usando o yarn:
 
 ##### Executando a aplicação com o docker-compose:
 Clone o repositório
@@ -35,7 +35,7 @@ docker-compose up   # no caso de erro tente como root: sudo docker-compose up
 ```
 Pronto! A aplicação está em execução, por padrão a aplicação está disponível na porta _8080_
 
-##### Executando com npm
+##### Executando com yarn
 Clone o repositório
 
 ```sh
@@ -44,7 +44,7 @@ git clone https://github.com/healthnewsapi/HealthNewsAPI.git
 
 Instale as dependências
 ```sh
-npm install
+yarn install
 ```
 
 Inicie o ElasticSearch
@@ -56,7 +56,7 @@ docker run -p 9200:9200 -e "discovery.type=single-node" docker.elastic.co/elasti
 Por fim, execute a aplicação
 
 ```sh
-npm start
+yarn start
 ```
 Pronto! A aplicação está em execução, por padrão a aplicação está disponível na porta _8080_
 
