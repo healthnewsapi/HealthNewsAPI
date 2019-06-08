@@ -134,7 +134,6 @@ class Noticias implements IRouter {
           doc: req.body,
         },
       };
-      console.log(req.body);
       try {
         const result = await client.update(docParams);
         const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
