@@ -1,8 +1,7 @@
-import { RequestParams } from "@elastic/elasticsearch";
+import { Client, RequestParams } from "@elastic/elasticsearch";
 import * as restify from "restify";
 import { INoticia } from "../model/noticiasModel";
 import { responsePagination } from "../routes/utils";
-import { client } from "../server/dbconnect";
 import { CustomError } from "../server/error.handler";
 import { IRouter } from "./router";
 
@@ -10,7 +9,13 @@ interface IUpdateNews {
   doc: INoticia;
 }
 
-class Noticias implements IRouter {
+export class Noticias implements IRouter {
+  public client: Client;
+
+  constructor(clientDB: Client) {
+    this.client = clientDB;
+  }
+
   public applyRoutes(appServer: restify.Server) {
     // ROUTE: Get all the news
     appServer.get("/noticias", async (req, resp, next) => {
@@ -49,7 +54,7 @@ class Noticias implements IRouter {
       };
 
       try {
-        let { body }: any = await client.search(searchParams);
+        let { body }: any = await this.client.search(searchParams);
 
         const totalItems = body.hits.total.value;
         body = body.hits.hits.map((obj: any) => {
@@ -73,7 +78,7 @@ class Noticias implements IRouter {
       };
 
       try {
-        const result = await client.get(doc);
+        const result = await this.client.get(doc);
         resp.json(responsePagination(Object.assign({id: result.body._id},
                                                     result.body._source),
                                                     req.headers.host as string,
@@ -97,7 +102,7 @@ class Noticias implements IRouter {
       };
 
       try {
-        const result = await client.index(doc);
+        const result = await this.client.index(doc);
         const dataResponse = Object.assign({id: result.body._id},
                                             JSON.parse(result.meta.request.params.body as any));
         resp.json(responsePagination(dataResponse,
@@ -124,12 +129,12 @@ class Noticias implements IRouter {
       };
 
       try {
-        const validatorResult = await client.exists(validator);
+        const validatorResult = await this.client.exists(validator);
         if (validatorResult.statusCode === 404) {
           const err = new CustomError("Response Error", "ResponseError", 404);
           throw err;
         }
-        const result = await client.index(doc);
+        const result = await this.client.index(doc);
         const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
         resp.json(responsePagination(dataResponse,
                                     req.headers.host as string,
@@ -149,7 +154,7 @@ class Noticias implements IRouter {
         },
       };
       try {
-        const result = await client.update(docParams);
+        const result = await this.client.update(docParams);
         const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
         resp.json(responsePagination(dataResponse,
                                     req.headers.host as string,
@@ -168,7 +173,7 @@ class Noticias implements IRouter {
       };
 
       try {
-        const result = await client.delete(docReference);
+        const result = await this.client.delete(docReference);
         resp.json({result: result.body.result});
       } catch (err) {
         next(err);
@@ -177,5 +182,3 @@ class Noticias implements IRouter {
     });
   }
 }
-
-export const noticias = new Noticias();

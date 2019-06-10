@@ -1,18 +1,28 @@
 import "jest";
 import * as restify from "restify";
 import request from "supertest";
-import { noticias } from "../src/routes/noticias";
-import { environment } from "../src/server/environment";
+import { Noticias } from "../src/routes/noticias";
+import { Database } from "../src/server/dbconnect";
+import { environment, environmentTest } from "../src/server/environment";
 import { Server } from "../src/server/server";
 
 let serverTest: Server;
 let andressTest: string;
 
 beforeAll(async () => {
-  environment.server.port = process.env.SERVER_PORT_API || 3001;
+  environment.server.port = environmentTest.serverTest.port;
+  environment.db.url = environmentTest.dbTest.url;
+
   andressTest = `http://localhost:${environment.server.port}`;
+
+  // Start Database Test
+  const client = new Database().client;
+  // Start Routes
+  const noticias =  new Noticias(client);
+  // Start Server Test
   serverTest = new Server();
   serverTest.startServer([noticias]);
+
   await new Promise((done) => setTimeout(done, 2000));
 });
 

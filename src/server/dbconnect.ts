@@ -1,7 +1,7 @@
 import { Client } from "@elastic/elasticsearch";
 import { environment } from "./environment";
 
-class UpDataBase {
+export class Database {
   public client: Client;
 
   constructor() {
@@ -65,8 +65,4 @@ class UpDataBase {
     })
     .catch((err: Error) => { console.log(err); });
   }
-
 }
-
-const client = new UpDataBase().client;
-export { client };
