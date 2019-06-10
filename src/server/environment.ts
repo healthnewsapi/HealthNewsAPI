@@ -21,4 +21,4 @@ const environmentTest = {
 export {
   environment,
   environmentTest,
-}
+};
