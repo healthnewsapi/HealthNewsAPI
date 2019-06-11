@@ -11,4 +11,4 @@ cache:
     - "node_modules"
 before_script:
   - sleep 10
-  - "npm run build"
+  - "yarn run build"
