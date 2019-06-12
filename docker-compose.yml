@@ -1,9 +1,7 @@
 version: "2.2"
 services:
-  node:
-    build: .
-    user: node
-    restart: always
+  healthnewsapi:
+    image: healthnewsapi/healthnewsapi
     environment:
       - NODE_ENV=production
       - URL_DB_NEWS=http://elasticsearch:9200
@@ -21,5 +19,8 @@ services:
     environment:
       - discovery.type=single-node
     volumes:
-      - ${HOME}/.healthnewsapi:/usr/share/elasticsearch/data
+      - esdata1:/usr/share/elasticsearch/data
+
+volumes:
+  esdata1:
 
