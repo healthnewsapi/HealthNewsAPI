@@ -393,7 +393,15 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/restify@^7.2.11":
+"@types/restify-cors-middleware@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/restify-cors-middleware/-/restify-cors-middleware-1.0.1.tgz#6c230c53a419eb3af83eeaabbcbc4771f25299e9"
+  integrity sha512-+S/FClLh8Wnw970RYEJ2OmdZDFwOR2GCf2hGqaB+fLdX3pRFb7WYJJHh6jN7Lrw2GiZ6LfybwgANExEC64x+Cg==
+  dependencies:
+    "@types/node" "*"
+    "@types/restify" "*"
+
+"@types/restify@*", "@types/restify@^7.2.11":
   version "7.2.11"
   resolved "https://registry.yarnpkg.com/@types/restify/-/restify-7.2.11.tgz#1560cafea6b3b8af8f83b203bfd3c254330ca490"
   integrity sha512-Df5vBC5OWHhM8rBZDyTBb+6vzSpL63g7a7oYrGQU6b8e16r5btRN8nUK845M4PTOAWPWsNfA3k+Wyhs3ZGkCiQ==
@@ -3416,6 +3424,13 @@ resolve@1.x, resolve@^1.10.0, resolve@^1.3.2:
   integrity sha512-vIpgF6wfuJOZI7KKKSP+HmiKggadPQAdsp5HiC1mvqnfp0gF1vdwgBWZIdrVft9pgqoMFQN+R7BSWZiBxx+BBw==
   dependencies:
     path-parse "^1.0.6"
+
+restify-cors-middleware@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/restify-cors-middleware/-/restify-cors-middleware-1.1.1.tgz#06688502fa08b8c62783103844c87dcfc30dcf3e"
+  integrity sha1-BmiFAvoIuMYngxA4RMh9z8MNzz4=
+  dependencies:
+    assert-plus "^1.0.0"
 
 restify-errors@^8.0.0:
   version "8.0.0"

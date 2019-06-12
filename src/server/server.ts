@@ -1,4 +1,5 @@
 import * as restify from "restify";
+import corsMiddleware from "restify-cors-middleware";
 import { IRouter } from "../routes/router";
 import { environment } from "./environment";
 import { handlerError } from "./error.handler";
@@ -18,7 +19,17 @@ export class Server {
   }
 
   private initialiRoutes(routes: IRouter[] = []) {
+    const corsOptions: corsMiddleware.Options = {
+      origins: ["*"],
+      preflightMaxAge: 10,
+      allowHeaders: [],
+      exposeHeaders: [],
+    };
 
+    const cors: corsMiddleware.CorsMiddleware = corsMiddleware(corsOptions);
+
+    this.appServer.pre(cors.preflight);
+    this.appServer.use(cors.actual);
     this.appServer.use(restify.plugins.queryParser());
     this.appServer.use(restify.plugins.bodyParser());
     this.appServer.on("restifyError", handlerError);

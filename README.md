@@ -6,11 +6,11 @@ API do Banco de dados de notícias da Sala de Situação em Saúde - FS
 ## Tabela de conteúdo:
 
   1. [Executando a aplicação](#executando-a-aplicação)
-    1.1 [Docker-compose](#executando-a-aplicação-com-o-docker-compose) 
-    1.2 [NodeJs / yarn](#executando-com-nodejs-e-yarn)
-    1.3 [Personalizando as portas](#personalizando-as-portas)
+  1.1 [Docker-compose](#executando-a-aplicação-com-o-docker-compose) 
+  1.2 [NodeJs / yarn](#executando-com-nodejs-e-yarn)
+  1.3 [Personalizando as portas](#personalizando-as-portas)
   2. [Visão geral da API](#visão-geral-da-api)
-    2.1. [Como Usar](#como-usar)
+  2.1. [Como Usar](#como-usar)
   3. [Executando os testes](#executando-os-testes)
   4. [Construído com](#construído-com)
   1. [Versionamento](#versionamento)
@@ -92,6 +92,8 @@ Por padrão a aplicação espera que o elasticSearch esteja disponível na porta
 export URL_DB_NEWS="http://localhost:9005"
 # Agora a aplicação vai procurar pelo ElasticSearch nesta URL
 ```
+
+**[⬆ Voltar para o topo](#tabela-de-conteúdo)**
 
 ## Visão geral da API
 
