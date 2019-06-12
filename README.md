@@ -22,16 +22,11 @@ API do Banco de dados de notícias da Sala de Situação em Saúde - FS
 Há duas formas disponíveis de executar a aplicação, via docker ou usando o NodeJS com yarn:
 
 #### Executando a aplicação com o docker-compose
-Clone o repositório
+
+Baixe o arquivo do docker-compose
 
 ```sh
-git clone https://github.com/healthnewsapi/HealthNewsAPI.git
-```
-
-Navegue até a pasta do projeto
-
-```sh
-cd HealthNewsAPI
+wget https://raw.githubusercontent.com/healthnewsapi/HealthNewsAPI/master/docker-compose.yml
 ```
 
 Execute a aplicação
