@@ -32,6 +32,7 @@ test("DELETE /noticias/id", () => {
                 "chuva",
               ],
               publishedAt: "2019-06-07T17:32:28Z",
+              insertionDate: "2018-11-19",
               score: 6.2,
               source: "Nome do site da noticia",
               title: "Titulo da noticia",

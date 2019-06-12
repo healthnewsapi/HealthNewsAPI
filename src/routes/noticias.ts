@@ -4,6 +4,7 @@ import { INoticia } from "../model/noticiasModel";
 import { responsePagination } from "../routes/utils";
 import { CustomError } from "../server/error.handler";
 import { IRouter } from "./router";
+import { patchDocValidation, postDocValidation } from "./validation";
 
 interface IUpdateNews {
   doc: INoticia;
@@ -92,16 +93,19 @@ export class Noticias implements IRouter {
 
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
-    // ROUTER: Add a news
-      const body = Object.assign(req.body, {indicators: {postedClipping: null, markedClipping: null,
-                                            mapViews: 0, mapDetails: 0}});
-
-      const doc: RequestParams.Index<INoticia> = {
-        index: "noticias",
-        body: req.body,
-      };
 
       try {
+        if (!postDocValidation(req.body)) {
+          throw new CustomError("Document with Invalid Field(s)", "InvalidField", 400);
+        }
+
+        Object.assign(req.body, {indicators: {postedClipping: null, markedClipping: null,
+                                              mapViews: 0, mapDetails: 0}});
+
+        const doc: RequestParams.Index<INoticia> = {
+          index: "noticias",
+          body: req.body,
+        };
         const result = await this.client.index(doc);
         const dataResponse = Object.assign({id: result.body._id},
                                             JSON.parse(result.meta.request.params.body as any));
@@ -117,12 +121,6 @@ export class Noticias implements IRouter {
     // ROUTE: Change a news
     // If the ID exists the document is updated, if not, it creates a new document
     appServer.put("/noticias/:id", async (req, resp, next) => {
-      const doc: RequestParams.Index<INoticia> = {
-        id: req.params.id,
-        index: "noticias",
-        body: req.body,
-      };
-
       const validator: RequestParams.Exists = {
         id: req.params.id,
         index: "noticias",
@@ -131,11 +129,25 @@ export class Noticias implements IRouter {
       try {
         const validatorResult = await this.client.exists(validator);
         if (validatorResult.statusCode === 404) {
-          const err = new CustomError("Response Error", "ResponseError", 404);
-          throw err;
+          throw new CustomError("ID not found", "idNotFound", 404);
         }
+
+        if (!postDocValidation(req.body)) {
+          throw new CustomError("Document with Invalid Field(s)", "InvalidField", 400);
+        }
+
+        Object.assign(req.body, {indicators: {postedClipping: null, markedClipping: null,
+                                              mapViews: 0, mapDetails: 0}});
+
+        const doc: RequestParams.Index<INoticia> = {
+          id: req.params.id,
+          index: "noticias",
+          body: req.body,
+        };
         const result = await this.client.index(doc);
-        const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
+        const dataResponse = Object.assign({id: result.body._id},
+                                            JSON.parse(result.meta.request.params.body as any));
+
         resp.json(responsePagination(dataResponse,
                                     req.headers.host as string,
                                     req.url as string, 1, 1, 1, `/noticias/${dataResponse.id}`));
@@ -154,6 +166,9 @@ export class Noticias implements IRouter {
         },
       };
       try {
+        if (!patchDocValidation(req.body)) {
+          throw new CustomError("Document with Invalid Field(s)", "InvalidField", 400);
+        }
         const result = await this.client.update(docParams);
         const dataResponse = Object.assign({id: result.body._id}, JSON.parse(result.meta.request.params.body as any));
         resp.json(responsePagination(dataResponse,

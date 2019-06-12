@@ -4,7 +4,7 @@ import { environmentTest } from "../src/server/environment";
 
 const andressTest = `http://localhost:${environmentTest.serverTest.port}`;
 
-test("GET /noticias", async () => {
+test("GET /noticias - Sucess case", async () => {
   return request(andressTest)
           .get("/noticias")
           .then((response: request.Response) => {
@@ -13,7 +13,7 @@ test("GET /noticias", async () => {
           }).catch(fail);
 });
 
-test("GET /noticias/idExistent", () => {
+test("GET /noticias/id - Sucess case", () => {
   return request(andressTest)
           .post("/noticias")
           .send({
@@ -25,6 +25,7 @@ test("GET /noticias/idExistent", () => {
                 "chuva",
               ],
               publishedAt: "2019-06-07T17:32:28Z",
+              insertionDate: "2018-11-19",
               score: 6.2,
               source: "Nome do site da noticia",
               title: "Titulo da noticia",
@@ -44,6 +45,7 @@ test("GET /noticias/idExistent", () => {
                 expect(response.body.data.description).toBe("Descrição da notícia");
                 expect(response.body.data.event).toEqual(["dengue", "chuva"]);
                 expect(response.body.data.publishedAt).toBe("2019-06-07T17:32:28Z");
+                expect(response.body.data.insertionDate).toBe("2018-11-19");
                 expect(response.body.data.score).toBe(6.2);
                 expect(response.body.data.source).toBe("Nome do site da noticia");
                 expect(response.body.data.title).toBe("Titulo da noticia");
@@ -55,7 +57,7 @@ test("GET /noticias/idExistent", () => {
               }).catch(fail);
 });
 
-test("GET /noticias/NonExistentID", () => {
+test("GET /noticias - Invalid ID", () => {
   return request(andressTest)
           .get("/noticias/NonExistentID")
           .then((response: request.Response) => {

@@ -3,19 +3,25 @@
 
 API do Banco de dados de notícias da Sala de Situação em Saúde - FS
 
-## Pré-requisitos
+## Tabela de conteúdo:
 
-> Para executar a aplicação localmente você precisa de:
+  1. [Executando a aplicação](#executando-a-aplicação)
+    1.1 [Docker-compose](#executando-a-aplicação-com-o-docker-compose) 
+    1.2 [NodeJs / yarn](#executando-com-nodejs-e-yarn)
+    1.3 [Personalizando as portas](#personalizando-as-portas)
+  2. [Visão geral da API](#visão-geral-da-api)
+    2.1. [Como Usar](#como-usar)
+  3. [Executando os testes](#executando-os-testes)
+  4. [Construído com](#construído-com)
+  1. [Versionamento](#versionamento)
+  1. [Autores](#autores)
+  1. [Licença](#licença)
 
-* [Node.js](https://nodejs.org/)
-* [Docker](https://www.docker.com/)
+## Executando a aplicação
 
+Há duas formas disponíveis de executar a aplicação, via docker ou usando o NodeJS com yarn:
 
-## Iniciando a aplicação
-
-Há duas formas disponíveis de executar a aplicação, via docker ou usando o yarn:
-
-##### Executando a aplicação com o docker-compose:
+#### Executando a aplicação com o docker-compose
 Clone o repositório
 
 ```sh
@@ -35,7 +41,16 @@ docker-compose up   # no caso de erro tente como root: sudo docker-compose up
 ```
 Pronto! A aplicação está em execução, por padrão a aplicação está disponível na porta _8080_
 
-##### Executando com yarn
+**[⬆ Voltar para o topo](#tabela-de-conteúdo)**
+
+#### Executando com NodeJs e Yarn
+
+> Para executar a aplicação você precisa de:
+
+* [Node.js](https://nodejs.org/)
+* [Yarn](https://yarnpkg.com)
+* [Docker](https://www.docker.com/)
+
 Clone o repositório
 
 ```sh
@@ -60,11 +75,29 @@ yarn start
 ```
 Pronto! A aplicação está em execução, por padrão a aplicação está disponível na porta _8080_
 
+**[⬆ Voltar para o topo](#tabela-de-conteúdo)**
+
+#### Personalizando as portas
+
+Para executar a aplicação em uma porta diferente da padrão(_8080_), basta configurar a variável de ambiente SERVER_PORT_API:
+
+```sh
+export SERVER_PORT_API=8001
+# Agora a aplicação vai estar disponível na porta 8001
+```
+
+Por padrão a aplicação espera que o elasticSearch esteja disponível na porta _9200_, para alterar este cenário basta configurar a variável de ambiente URL_DB_NEWS:
+
+```sh
+export URL_DB_NEWS="http://localhost:9005"
+# Agora a aplicação vai procurar pelo ElasticSearch nesta URL
+```
+
 ## Visão geral da API
 
 A API trabalha com o formato JSON, recomendamos o uso do header `Content-Type: application/json`
 
-## Como Usar
+### Como Usar
 
 
 #### **Rotas:**
@@ -92,10 +125,11 @@ POST /noticias
   "description": "Descrição da notícia",
   "event": [
     "dengue",
-    "chuva"
+    "chuva",
   ],
-  "publishedAt": "2017-07-21T17:32:28Z",
-  "score": 6.2,
+  "publishedAt": "2019-06-07T17:32:28Z",
+  "insertionDate": "2018-11-19",
+  "score": 6.1,
   "source": "Nome do site da noticia",
   "title": "Titulo da noticia",
   "country": "BR",
@@ -116,18 +150,21 @@ PUT /noticias/ID
 // Para alterar apenas os campos da notícia USE O MÉTODO PATCH
 {
   "author": "Novo nome do autor",
-  "content": "Novo conteúdo da notícia",
+  "content": "Esta é uma nova notícia sobre saúde...",
   "description": "Nova descrição da notícia",
-  "event": [ "novo evento" ],
-  "publishedAt": "2018-08-22T18:43:29Z",
-  "score": 6.5,
-  "source": "novo nome do site da noticia",
-  "title": "novo titulo da noticia",
+  "event": [
+    "Novo evento",
+  ],
+  "publishedAt": "2018-06-08T17:32:28Z",
+  "insertionDate": "2019-02-03",
+  "score": 6.3,
+  "source": "Novo nome do site da noticia",
+  "title": "Novo titulo da noticia",
   "country": "BR",
-  "region": "nova regiao",
-  "uf": "uf",
+  "region": "Sul",
+  "uf": "PR",
   "url": "novositedanoticia.com/noticia1",
-  "urlToImage": "novositedanoticia.com/noticia1/image.jpg"
+  "urlToImage": "novositedanoticia.com/noticia1/image.jpg",
 }
 ```
 
@@ -139,7 +176,7 @@ PATCH /noticias/{ID}
 // O body da requisição deve conter o(s) campo(s) e o dado a ser modificado
 {
     "source": "Nova Fonte da noticia",
-    "url_to_image": "Nova url da imagem"
+    "event": ["estresse"]
 }
 ```
 
@@ -148,6 +185,32 @@ _Deletar uma notícia:_
 ```javascript
 DELETE /noticias/ID
 ```
+
+**[⬆ Voltar para o topo](#tabela-de-conteúdo)**
+
+## Executando os testes
+
+Inicie um container com ElasticSearch para testes. Usamos por padrão a porta 9001 para executar os testes
+
+```sh
+docker run -d -p 9001:9200 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.1.1
+```
+
+Execute os testes
+
+```sh
+yarn test
+```
+
+_* Para executar os testes em outra porta ou o banco em outra url basta configurar as variáveis de ambiente:_
+
+```sh
+export SERVER_PORT_API_TEST=3002 # Porta para executar os testes
+
+export URL_DB_NEWS_TEST="http://localhost:9005" # URL do ElasticSearch para testes
+```
+
+**[⬆ Voltar para o topo](#tabela-de-conteúdo)**
 
 ## Construído com:
 
@@ -163,6 +226,9 @@ Nós usamos [SemVer](http://semver.org/) para versionamento. Para mais versões 
 * [Ingrid Lorraine](https://github.com/lorrainesilva)
 * [João Victor](https://github.com/joao-victor-silva)
 
+
 ## Licença
 
 Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
+
+**[⬆ Voltar para o topo](#tabela-de-conteúdo)**
