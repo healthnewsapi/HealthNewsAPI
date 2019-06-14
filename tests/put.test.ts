@@ -3,6 +3,7 @@ import request from "supertest";
 import { environmentTest } from "../src/server/environment";
 
 const andressTest = `http://localhost:${environmentTest.serverTest.port}`;
+const [user, pass] = environmentTest.authTest.apiKey.split(":");
 
 const dataPost = {
   author: "Nome do autor",
@@ -46,9 +47,11 @@ const dataPut = {
 test("PUT /noticias/id - Sucess case", () => {
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataPost)
             .then((response: request.Response) => request(andressTest)
                                                   .put(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
                                                   .send(dataPut))
             .then((response: request.Response) => {
               expect(response.status).toBe(200);
@@ -73,6 +76,7 @@ test("PUT /noticias/id - Sucess case", () => {
 test("PUT /noticias/id - Invalid ID", () => {
   return request(andressTest)
           .put("/noticias/InvalidID3210")
+          .auth(user, pass)
           .send(dataPut)
             .then((response: request.Response) => {
               expect(response.status).toBe(404);
@@ -87,9 +91,11 @@ test("PUT /noticias - Number of fields < 14", () => {
 
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataPost)
             .then((response: request.Response) => request(andressTest)
                                                   .put(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
                                                   .send(newDataSend))
             .then((response: request.Response) => {
               expect(response.status).toBe(400);
@@ -104,9 +110,11 @@ test("PUT /noticias - Number of fields > 14", () => {
 
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataPost)
             .then((response: request.Response) => request(andressTest)
                                                   .put(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
                                                   .send(newDataSend))
             .then((response: request.Response) => {
               expect(response.status).toBe(400);
@@ -122,9 +130,11 @@ test("PUT /noticias - Number of fields == 14 && Invalid Field", () => {
 
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataPost)
             .then((response: request.Response) => request(andressTest)
                                                   .put(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
                                                   .send(newDataSend))
             .then((response: request.Response) => {
               expect(response.status).toBe(400);

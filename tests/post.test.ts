@@ -3,6 +3,7 @@ import request from "supertest";
 import { environmentTest } from "../src/server/environment";
 
 const andressTest = `http://localhost:${environmentTest.serverTest.port}`;
+const [user, pass] = environmentTest.authTest.apiKey.split(":");
 
 const dataPost = {
   author: "Nome do autor",
@@ -27,6 +28,7 @@ const dataPost = {
 test("POST /noticias - Sucess case", () => {
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataPost)
             .then((response: request.Response) => {
               expect(response.status).toBe(200);
@@ -53,6 +55,7 @@ test("POST /noticias - Number of fields < 14", () => {
 
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataSend)
             .then((response: request.Response) => {
               expect(response.status).toBe(400);
@@ -67,6 +70,7 @@ test("POST /noticias - Number of fields > 14", () => {
 
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataSend)
             .then((response: request.Response) => {
               expect(response.status).toBe(400);
@@ -82,6 +86,7 @@ test("POST /noticias - Number of fields == 14 && Invalid Field", () => {
 
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataSend)
             .then((response: request.Response) => {
               expect(response.status).toBe(400);

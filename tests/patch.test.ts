@@ -3,6 +3,7 @@ import request from "supertest";
 import { environmentTest } from "../src/server/environment";
 
 const andressTest = `http://localhost:${environmentTest.serverTest.port}`;
+const [user, pass] = environmentTest.authTest.apiKey.split(":");
 
 const dataPost = {
   author: "Nome do autor",
@@ -27,9 +28,11 @@ const dataPost = {
 test("PATCH /noticias/id - Sucess case", () => {
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataPost)
             .then((response: request.Response) => request(andressTest)
                                                   .patch(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
                                                   .send({
                                                     uf: "GO",
                                                   }))
@@ -43,6 +46,7 @@ test("PATCH /noticias/id - Sucess case", () => {
 test("PATCH /noticias/id - Invalid ID", () => {
   return request(andressTest)
           .patch("/noticias/InvalidID5432")
+          .auth(user, pass)
             .send({
               invalidField: "XYZ",
             })
@@ -56,9 +60,11 @@ test("PATCH /noticias/id - Invalid ID", () => {
 test("PATCH /noticias/id - Invalid Field", () => {
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send(dataPost)
             .then((response: request.Response) => request(andressTest)
                                                   .patch(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
                                                   .send({
                                                     invalidField: "XYZ",
                                                   }))

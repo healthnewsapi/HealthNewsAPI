@@ -2,6 +2,7 @@ import { Client, RequestParams } from "@elastic/elasticsearch";
 import * as restify from "restify";
 import { INoticia } from "../model/noticiasModel";
 import { responsePagination } from "../routes/utils";
+import { authorization } from "../server/authorization";
 import { CustomError } from "../server/error.handler";
 import { IRouter } from "./router";
 import { patchDocValidation, postDocValidation } from "./validation";
@@ -93,8 +94,10 @@ export class Noticias implements IRouter {
 
     // ROUTE: Add a news
     appServer.post("/noticias", async (req, resp, next) => {
-
       try {
+        if (!authorization(req.headers)) {
+          throw new CustomError(" Invalid Credentials", "Unauthorized", 401);
+        }
         if (!postDocValidation(req.body)) {
           throw new CustomError("Document with Invalid Field(s)", "InvalidField", 400);
         }
@@ -127,6 +130,9 @@ export class Noticias implements IRouter {
       };
 
       try {
+        if (!authorization(req.headers)) {
+          throw new CustomError(" Invalid Credentials", "Unauthorized", 401);
+        }
         const validatorResult = await this.client.exists(validator);
         if (validatorResult.statusCode === 404) {
           throw new CustomError("ID not found", "idNotFound", 404);
@@ -166,6 +172,9 @@ export class Noticias implements IRouter {
         },
       };
       try {
+        if (!authorization(req.headers)) {
+          throw new CustomError(" Invalid Credentials", "Unauthorized", 401);
+        }
         if (!patchDocValidation(req.body)) {
           throw new CustomError("Document with Invalid Field(s)", "InvalidField", 400);
         }
@@ -188,6 +197,9 @@ export class Noticias implements IRouter {
       };
 
       try {
+        if (!authorization(req.headers)) {
+          throw new CustomError(" Invalid Credentials", "Unauthorized", 401);
+        }
         const result = await this.client.delete(docReference);
         resp.json({result: result.body.result});
       } catch (err) {

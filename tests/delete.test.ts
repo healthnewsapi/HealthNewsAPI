@@ -3,10 +3,12 @@ import request from "supertest";
 import { environmentTest } from "../src/server/environment";
 
 const andressTest = `http://localhost:${environmentTest.serverTest.port}`;
+const [user, pass] = environmentTest.authTest.apiKey.split(":");
 
 test("DELETE without ID /noticias", () => {
   return request(andressTest)
           .delete("/noticias")
+          .auth(user, pass)
           .then((response: request.Response) => {
                 expect(response.status).toBe(405);
               }).catch(fail);
@@ -15,6 +17,7 @@ test("DELETE without ID /noticias", () => {
 test("DELETE /noticias/NonExistentID", () => {
   return request(andressTest)
           .delete("/noticias/NonExistentID")
+          .auth(user, pass)
           .then((response: request.Response) => {
                 expect(response.status).toBe(404);
               }).catch(fail);
@@ -23,6 +26,7 @@ test("DELETE /noticias/NonExistentID", () => {
 test("DELETE /noticias/id", () => {
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send({
               author: "Autor",
               content: "Esta é uma notícia sobre saúde...",
@@ -43,7 +47,8 @@ test("DELETE /noticias/id", () => {
               urlToImage: "sitedanoticia.com/noticia1/image.jpg",
             })
             .then((response: request.Response) => request(andressTest)
-                                                  .delete(`/noticias/${response.body.data.id}`))
+                                                  .delete(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass))
             .then((response: request.Response) => {
                 expect(response.status).toBe(200);
               }).catch(fail);

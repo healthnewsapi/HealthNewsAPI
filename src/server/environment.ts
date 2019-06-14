@@ -9,6 +9,10 @@ const environment = {
   },
 };
 
+const auth = {
+  apiKey: process.env.HEALTH_NEWS_API_KEY || "dev:apikey",
+};
+
 const environmentTest = {
   dbTest: {
     url: process.env.URL_DB_NEWS_TEST || "http://localhost:9001",
@@ -16,9 +20,13 @@ const environmentTest = {
   serverTest: {
     port: process.env.SERVER_PORT_API_TEST || 3001,
   },
+  authTest: {
+    apiKey: process.env.HEALTH_NEWS_API_KEY || "test:apikeytest",
+  },
 };
 
 export {
   environment,
+  auth,
   environmentTest,
 };

@@ -4,7 +4,7 @@ import { environmentTest } from "../src/server/environment";
 
 const andressTest = `http://localhost:${environmentTest.serverTest.port}`;
 
-test("GET /noticias - Sucess case", async () => {
+test.only("GET /noticias - Sucess case", async () => {
   return request(andressTest)
           .get("/noticias")
           .then((response: request.Response) => {
