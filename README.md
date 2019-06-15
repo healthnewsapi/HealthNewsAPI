@@ -11,6 +11,8 @@ API do Banco de dados de notícias da Sala de Situação em Saúde - FS
       1. [Personalizando as portas](#personalizando-as-portas)
   1. [Visão geral da API](#visão-geral-da-api)
       1. [Como Usar](#como-usar)
+      1. [Autorização](#autorização)
+      1. [Rotas](#rotas)
   1. [Executando os testes](#executando-os-testes)
   1. [Construído com](#construído-com)
   1. [Versionamento](#versionamento)
@@ -96,24 +98,38 @@ A API trabalha com o formato JSON, recomendamos o uso do header `Content-Type: a
 
 ### Como Usar
 
+#### Autorização:
 
-#### **Rotas:**
+Para utilizar os métodos de busca não é necessário nenhum tipo de autenticação ou autorização, mas para o uso de metódos que modificam a base de dados, faz-se necessário o uso de uma autorização.
+
+Para usar os métodos POST, PUT, PATCH, DELETE deve ser enviado um header **Authorization** do tipo **Basic** da seguinte forma:
+
+```http
+Authorization: Basic <credentials>
+```
+Para o ambiente de desenvolvimento a API usa como valor padrão `"dev:apikey"`, que será códificado no header como `Authorization: Basic ZGV2OmFwaWtleQ==`
+
+**[⬆ Voltar para o topo](#tabela-de-conteúdo)**
+
+#### Rotas:
 
 _Listar notícias:_
-```javascript
-GET /noticias
+```http
+GET /noticias HTTP/1.1
 ```
 
 _Buscar notícia por ID:_
 
-```javascript
-GET /noticias/ID
+```http
+GET /noticias/ID HTTP/1.1
 ```
 
 _Inserir uma nova notícia:_
 
-```javascript
-POST /noticias
+```http
+POST /noticias HTTP/1.1
+Authorization: Basic ZGV2OmFwaWtleQ==
+Content-Type: application/json; 
 
 // O body da requisição deve conter o documento JSON a ser inserido
 {
@@ -122,7 +138,7 @@ POST /noticias
   "description": "Descrição da notícia",
   "event": [
     "dengue",
-    "chuva",
+    "chuva"
   ],
   "publishedAt": "2019-06-07T17:32:28Z",
   "insertionDate": "2018-11-19",
@@ -139,8 +155,10 @@ POST /noticias
 
 _Substituir uma notícia:_
 
-```javascript
-PUT /noticias/ID
+```http
+PUT /noticias/ID HTTP/1.1
+Authorization: Basic ZGV2OmFwaWtleQ==
+Content-Type: application/json; 
 
 // O body da requisição deve conter o NOVO documento JSON a ser inserido no ID indicado
 // Neste metódo toda a notícia é substituida. 
@@ -150,7 +168,7 @@ PUT /noticias/ID
   "content": "Esta é uma nova notícia sobre saúde...",
   "description": "Nova descrição da notícia",
   "event": [
-    "Novo evento",
+    "Novo evento"
   ],
   "publishedAt": "2018-06-08T17:32:28Z",
   "insertionDate": "2019-02-03",
@@ -161,14 +179,16 @@ PUT /noticias/ID
   "region": "Sul",
   "uf": "PR",
   "url": "novositedanoticia.com/noticia1",
-  "urlToImage": "novositedanoticia.com/noticia1/image.jpg",
+  "urlToImage": "novositedanoticia.com/noticia1/image.jpg"
 }
 ```
 
 _Modificar um ou mais campos de uma notícia:_
 
-```javascript
-PATCH /noticias/{ID}
+```http
+PATCH /noticias/ID HTTP/1.1
+Authorization: Basic ZGV2OmFwaWtleQ==
+Content-Type: application/json; 
 
 // O body da requisição deve conter o(s) campo(s) e o dado a ser modificado
 {
@@ -179,8 +199,9 @@ PATCH /noticias/{ID}
 
 _Deletar uma notícia:_
 
-```javascript
-DELETE /noticias/ID
+```http
+DELETE /noticias/ID  HTTP/1.1
+Authorization: Basic ZGV2OmFwaWtleQ==
 ```
 
 **[⬆ Voltar para o topo](#tabela-de-conteúdo)**
