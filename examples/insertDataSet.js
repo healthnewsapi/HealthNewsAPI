@@ -11,7 +11,8 @@ const postNews = (news) => {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Content-Length": Buffer.byteLength(postData)
+            "Content-Length": Buffer.byteLength(postData),
+            "Authorization": "Basic ZGV2OmFwaWtleQ=="
         }
     };
 
