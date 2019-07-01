@@ -3,8 +3,9 @@ import request from "supertest";
 import { environmentTest } from "../src/server/environment";
 
 const andressTest = `http://localhost:${environmentTest.serverTest.port}`;
+const [user, pass] = environmentTest.authTest.apiKey.split(":");
 
-test.only("GET /noticias - Sucess case", async () => {
+test("GET /noticias - Sucess case", async () => {
   return request(andressTest)
           .get("/noticias")
           .then((response: request.Response) => {
@@ -16,6 +17,7 @@ test.only("GET /noticias - Sucess case", async () => {
 test("GET /noticias/id - Sucess case", () => {
   return request(andressTest)
           .post("/noticias")
+          .auth(user, pass)
           .send({
               author: "Nome do autor",
               content: "Esta é uma notícia sobre saúde...",

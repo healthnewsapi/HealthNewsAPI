@@ -74,3 +74,43 @@ test("PATCH /noticias/id - Invalid Field", () => {
               expect(response.body.status).toBeDefined();
             }).catch(fail);
 });
+
+test("PATCH /noticias/id - indicators Field - Sucess case", () => {
+  return request(andressTest)
+          .post("/noticias")
+          .auth(user, pass)
+          .send(dataPost)
+            .then((response: request.Response) => request(andressTest)
+                                                  .patch(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
+                                                  .send({
+                                                    indicators: {
+                                                      mapViews: 1,
+                                                    },
+                                                  }))
+            .then((response: request.Response) => {
+                expect(response.status).toBe(200);
+                expect(response.body.data.id).toBeDefined();
+                expect(response.body.data.doc.indicators.mapViews).toBe(1);
+            }).catch(fail);
+});
+
+test("PATCH /noticias/id - indicators Field - Error case (Invalid Field)", () => {
+  return request(andressTest)
+          .post("/noticias")
+          .auth(user, pass)
+          .send(dataPost)
+            .then((response: request.Response) => request(andressTest)
+                                                  .patch(`/noticias/${response.body.data.id}`)
+                                                  .auth(user, pass)
+                                                  .send({
+                                                    indicators: {
+                                                      mapsViews: 2,
+                                                    },
+                                                  }))
+            .then((response: request.Response) => {
+              expect(response.status).toBe(400);
+              expect(response.body.detail).toBeDefined();
+              expect(response.body.status).toBeDefined();
+            }).catch(fail);
+});

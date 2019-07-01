@@ -1,21 +1,47 @@
+const fieldPost = [
+  "author",
+  "content",
+  "country",
+  "description",
+  "event",
+  "insertionDate",
+  "publishedAt",
+  "region",
+  "score",
+  "source",
+  "title",
+  "uf",
+  "url",
+  "urlToImage",
+];
+
+const fieldPatch = [
+  "author",
+  "content",
+  "country",
+  "description",
+  "event",
+  "indicators",
+  "insertionDate",
+  "publishedAt",
+  "region",
+  "score",
+  "source",
+  "title",
+  "uf",
+  "url",
+  "urlToImage",
+];
+
+const indicators = [
+  "mapDetails",
+  "mapViews",
+  "markedClipping",
+  "postedClipping",
+];
+
 // Search field using binarySearch
-const searchField = (element: any): boolean => {
-  const field = [
-    "author",
-    "content",
-    "country",
-    "description",
-    "event",
-    "insertionDate",
-    "publishedAt",
-    "region",
-    "score",
-    "source",
-    "title",
-    "uf",
-    "url",
-    "urlToImage",
-  ];
+const searchField = (element: any, field: any ): boolean => {
   let begin = 0;
   let end = field.length - 1;
   let middle;
@@ -48,7 +74,7 @@ const postDocValidation = (body: any = {}): boolean => {
   }
 
   for (const key of keys) {
-    if (!searchField(key)) {
+    if (!searchField(key, fieldPost)) {
       return false;
     }
   }
@@ -66,8 +92,16 @@ const patchDocValidation = (body: any = {}): boolean => {
   }
 
   for (const key of keys) {
-    if (!searchField(key)) {
+    if (!searchField(key, fieldPatch)) {
       return false;
+    } else if (key === "indicators") {
+      const indicatorsFieldKey = [...Object.keys(body.indicators)];
+
+      for (const indicatorsKey of  indicatorsFieldKey) {
+        if (!searchField(indicatorsKey, indicators)) {
+          return false;
+        }
+      }
     }
   }
   return true;
